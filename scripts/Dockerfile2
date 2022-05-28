@@ -1,0 +1,9 @@
+FROM aperture147/tensorflow-non-avx:bionic-slim
+
+RUN mkdir scripts
+
+WORKDIR /scripts
+
+ADD . /scripts
+
+ENTRYPOINT ["./start.sh"]

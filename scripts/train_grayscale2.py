@@ -1,6 +1,7 @@
 # Librerias
 import sys
 import os
+import datetime
 import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 from keras import optimizers
@@ -16,7 +17,7 @@ image_train = "./caras/entrenamiento"
 image_validation = "./caras/validacion"
 
 #Parametros globales
-epoch = 8
+epoch = 256
 height = 250
 width = 250
 batch_size = 4
@@ -104,12 +105,20 @@ cnn.compile(
     metrics = ['accuracy']
 )
 
+log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir,
+        histogram_freq=0,
+        write_graph=False,
+        write_images=False,
+        update_freq='epoch')
+
 cnn.fit_generator(
     train_generator,
     steps_per_epoch= int(2018/batch_size),
     epochs = epoch,
     validation_data = validation_generator,
-    validation_steps = int(1787/batch_size)
+    validation_steps = int(1787/batch_size),
+    callbacks = [ tensorboard_callback ]
 )
 
 target_dir = './modelo2'
